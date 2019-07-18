@@ -1,7 +1,9 @@
 package main
+import "net/http"
 import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
 import "log"
+import "fmt"
 const db_url = "tinyr_url_user:Adeg*#%23f@tcp(localhost:3306)/tinyurl_single"
 
 func main() {
@@ -9,11 +11,26 @@ func main() {
 }
 
 func run() {
-  log.Println("hello, tinyurl")
-  short_url := insert_url("http://www.yahoo.com")
-  log.Println(short_url)
-  long_url := get_long_url(short_url)
-  log.Println(long_url)
+  startServer()
+}
+
+func startServer() {
+  http.HandleFunc("/generate_short_url", generate_short_url)
+  http.HandleFunc("/s/", redirect_to_long_url)
+  http.Handle("/", http.FileServer(http.Dir("./static")))
+  http.ListenAndServe(":8080", nil)  
+}
+
+func generate_short_url(w http.ResponseWriter, r * http.Request) {
+  long_url := r.FormValue("long_url")
+  short_url := insert_url(long_url)
+  fmt.Fprintf(w, short_url)
+}
+
+func redirect_to_long_url(w http.ResponseWriter, r * http.Request) {
+  short_url_key := r.URL.Path[len("/s/"):]
+  long_url := get_long_url(short_url_key)
+  http.Redirect(w, r, long_url, 301)
 }
 
 func encode_base_62(id int64) string {
