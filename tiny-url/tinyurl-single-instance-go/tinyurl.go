@@ -3,7 +3,8 @@ import "net/http"
 import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
 import "log"
-import "fmt"
+import "html/template"
+
 const db_url = "tinyr_url_user:Adeg*#%23f@tcp(localhost:3306)/tinyurl_single"
 
 func main() {
@@ -17,14 +18,25 @@ func run() {
 func startServer() {
   http.HandleFunc("/generate_short_url", generate_short_url)
   http.HandleFunc("/s/", redirect_to_long_url)
-  http.Handle("/", http.FileServer(http.Dir("./static")))
+  http.HandleFunc("/", func(w http.ResponseWriter, r * http.Request) {
+    http.ServeFile(w, r, "index.html")
+  })
   http.ListenAndServe(":8080", nil)  
 }
 
 func generate_short_url(w http.ResponseWriter, r * http.Request) {
   long_url := r.FormValue("long_url")
-  short_url := insert_url(long_url)
-  fmt.Fprintf(w, short_url)
+  short_url_key := insert_url(long_url)
+  
+  tmpl, err := template.ParseFiles("result.html")
+  if err != nil {
+    log.Println("failed to parse template result.html" + err.Error())
+  }
+  var data = map[string]string{
+    "short_url_key":short_url_key, 
+    "long_url":long_url,
+  }
+  tmpl.Execute(w, data)
 }
 
 func redirect_to_long_url(w http.ResponseWriter, r * http.Request) {

@@ -1,0 +1,60 @@
+<html>
+<head>
+  <title>tinyurl demo</title>
+  <style>
+    .center {
+      width:800px; 
+      margin:30px auto;
+      text-align: center;
+    }
+    .submit_btn {
+      width: 200px;  
+      height: 56px;
+      border:none;
+      background-color: #2c87c5;
+      font: bold 17px lato,arial;
+      color: #fff;
+      border-radius: 6px;
+    }
+    .text_box {
+      width: 480px;
+      height: 56px;
+      padding: 10px 16px;
+      font: 17px lato,arial;
+      color: #000;
+      background: #fff;
+      border: 1px solid #bbb;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="center">
+    <a href="/">
+    a tinyurl demo
+    </a>
+  </h1>
+  <div class="center"> 
+    
+    <form action="/generate_short_url">
+      <div>
+        <input name="long_url" type="text"  class="text_box" value="{{.long_url}}"/> 
+        <input type="submit" value="Generate short url" class="submit_btn"/>
+      </div>
+      <div style="margin: 20px 20px">
+         short url is : 
+         <a href="/s/{{.short_url_key}}" target="_blank">
+           http://localhost:8080/s/{{.short_url_key}}
+         </a>
+      </div>
+
+    </form>
+  </div>
+</body>
+
+<footer class="center">
+powered by <a href="http://www.noteanddata.com" target="_blank">http://www.noteanddata.com</a>
+</footer>
+    
+</html>
