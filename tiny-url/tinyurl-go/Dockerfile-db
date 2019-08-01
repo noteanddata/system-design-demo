@@ -1,0 +1,7 @@
+# docker build . -f Dockerfile-db -t tinyurldb
+FROM mysql:5.7
+
+ENV MYSQL_ROOT_PASSWORD=demo
+COPY db/db-init.sql /docker-entrypoint-initdb.d
+
+EXPOSE 3306

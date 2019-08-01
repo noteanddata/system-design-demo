@@ -4,10 +4,15 @@ import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
 import "log"
 import "html/template"
+import "os"
 
-const db_url = "tinyr_url_user:Adeg*#%23f@tcp(localhost:3306)/tinyurl_single"
+var db_url string
+
 
 func main() {
+  // run with dbhost
+  dbhost := os.Args[1]
+  db_url = "tinyurl_user:Adeg*#%23f@tcp(" + dbhost + ":3306)/tinyurl"
   run()
 }
 
