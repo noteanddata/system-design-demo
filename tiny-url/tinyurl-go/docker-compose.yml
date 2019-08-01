@@ -1,0 +1,16 @@
+# how to run 
+# docker-compose up
+version: '3'
+services:
+  web:
+    build: 
+      context: .
+      args:
+        dbhost: tinyurldb
+    ports:
+      - "8080:8080"
+  tinyurldb:
+    build:
+      context: .
+      dockerfile: Dockerfile-db
+    

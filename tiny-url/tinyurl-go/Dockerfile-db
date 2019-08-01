@@ -1,4 +1,4 @@
-# docker build . -f Dockerfile-db -t tinyurldb
+# docker build . -f Dockerfile-db -t tinyurldb:0.08
 FROM mysql:5.7
 
 ENV MYSQL_ROOT_PASSWORD=demo
